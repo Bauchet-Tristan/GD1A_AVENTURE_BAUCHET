@@ -16,6 +16,12 @@ class lvl1 extends Phaser.Scene //
 
     preload()
     {
+        //chargement des tuilles
+        this.load.image("phaser_tuilesdejeu","assets/tuilesJeu.png");
+
+        //chargement de la carte
+        this.load.tilemapTiledJSON("carte", "assets/map.json");
+
         this.load.image('sky', 'assets/sky.png');
         this.load.image('ground', 'assets/platform.png');
         this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
@@ -23,28 +29,40 @@ class lvl1 extends Phaser.Scene //
 
     create()
     {
-        this.add.text(20,20, "Playing game...");
+        //chargement de la carte
+        const carteDuNiveau = this.add.tilemap("carte");
 
-            //  A simple background for our game
-        this.add.image(400, 300, 'sky');
+        // chargement du jeu de tuiles
+        const tileset = carteDuNiveau.addTilesetImage(
+            "tuiles_de_jeu",
+            "Phaser_tuilesdejeu"
+        );  
 
-        //  The platforms group contains the ground and the 2 ledges we can jump on
-        platforms = this.physics.add.staticGroup();
+        // chargement du calque calque_background_1
+        const backgroundLayer = carteDuNiveau.createStaticLayer(
+            "calque_background_1",
+            tileset
+        );
 
-        //  Here we create the ground.
-        //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-        platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+        // chargement du calque calque_background_2
+        const backgroundLayer2 = carteDuNiveau.createStaticLayer(
+            "calque_background_2",
+            tileset
+        );
 
-        //  Now let's create some ledges
-        platforms.create(600, 400, 'ground');
-        platforms.create(50, 250, 'ground');
-        platforms.create(750, 220, 'ground');
+        // chargement du calque calque_plateformes
+        const plateformes = carteDuNiveau.createStaticLayer(
+            "calque_plateformes",
+            tileset
+        );  
 
+        plateformes.setCollisionByProperty({ estSolide: true });
+
+////////////////////////////////
         // The player and its settings
         player = this.physics.add.sprite(100, 450, 'dude');
 
         //  Player physics properties. Give the little guy a slight bounce.
-        player.setBounce(0.2);
         player.setCollideWorldBounds(true);
 
         //  Our player animations, turning, walking left and walking right.
@@ -68,12 +86,18 @@ class lvl1 extends Phaser.Scene //
             repeat: -1
         });
 
+        this.physics.world.setBounds(0, 0, 3200, 640);
+        //  ajout du champs de la caméra de taille identique à celle du monde
+        this.cameras.main.setBounds(0, 0, 3200, 640);
+        // ancrage de la caméra sur le joueur
+        this.cameras.main.startFollow(player);  
+
         //  Input Events
         cursors = this.input.keyboard.createCursorKeys();
 
         //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
 
-        this.physics.add.collider(player, platforms,Touching());
+        this.physics.add.collider(player, plateformes);
     }
 
 
@@ -103,18 +127,18 @@ class lvl1 extends Phaser.Scene //
             player.anims.play('turn');
         }
     
-        if (cursors.up.isDown && player.body.touching.down)
+        if (cursors.up.isDown && player.body.blocked.down) 
         {
-            player.setVelocityY(-330);
-        }
+            player.setVelocityY(-200);
+        }  
     }
 }
-
+/*
 function Touching()
 {
     score++;
     console.log(score);
-}
+}*/
 
 
 ////////////

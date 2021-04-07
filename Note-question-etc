@@ -1,0 +1,4 @@
+Préparer l'intégration avec Phaser pour la gestion des collisions
+
+Question :
+la fonction "Touching" il ne passe que une fois dedans et il faudrais qu'il passe a chaque collide avec le ground.
