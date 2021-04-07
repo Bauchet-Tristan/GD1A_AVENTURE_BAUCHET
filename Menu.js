@@ -19,12 +19,23 @@ class Menu extends Phaser.Scene //
     create()
     {
         this.add.text(20,20, "menu");
-        this.scene.start("lvl1");
+        
     }
 
     update()
     {
-
+        score ++;
+        console.log(score);
+        if(score == 50)
+        {  
+            this.scene.setVisible(false);
+            this.scene.sleep("Menu");
+        }
+        else if(score == 100)
+        {
+            this.scene.setVisible(true);
+            console.log("tes revenu woaw");
+        }
     }
 
 }

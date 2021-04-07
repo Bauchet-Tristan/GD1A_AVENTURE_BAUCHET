@@ -18,9 +18,10 @@ var config = {
 var player;
 var platforms;
 var cursors;
-var score = 0;
+var score = 5;
+var platform1
 var gameOver = false;
 
+
+
 var game = new Phaser.Game(config);
-
-
