@@ -33,8 +33,6 @@ var config = {
 };
 
 var player;
-var bombs;
-var platforms;
 var cursors;
 var score = 0;
 var gameOver = false;
@@ -45,48 +43,34 @@ var game = new Phaser.Game(config);
 function preload ()
 {
     this.load.image("Phaser_tuilesdejeu", "tuilesJeu.png");
+    this.load.tilemapTiledJSON("carte", "map.json");
 
-    // chargement de la carte
-    this.load.tilemapTiledJSON("carte", "map.json");  
-
-    this.load.image('sky', 'assets/sky.png');
-    this.load.image('ground', 'assets/platform.png');
+    
     this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
 }
 
 function create ()
 {
-
-
     // chargement de la carte
-    const carteDuNiveau = this.add.tilemap("carte");
+    this.carteDuNiveau = this.add.tilemap("carte");
 
     // chargement du jeu de tuiles
-    const tileset = carteDuNiveau.addTilesetImage(
-          "tuiles_de_jeu",
-          "Phaser_tuilesdejeu"
-        );  
+    this.tileset = this.carteDuNiveau.addTilesetImage("tuiles_de_jeu","Phaser_tuilesdejeu");  
     
-        // chargement du calque calque_background
-    const backgroundLayer = carteDuNiveau.createStaticLayer(
-        "calque_background_1",
-        tileset
-    );
+    // chargement du calque calque_background
+    this.backgroundLayer = this.carteDuNiveau.createStaticLayer("calque_background_1",this.tileset,0,0);
 
     // chargement du calque calque_background_2
-    const backgroundLayer2 = carteDuNiveau.createStaticLayer(
-        "calque_background_2",
-        tileset
-    );
+    this.backgroundLayer2 = this.carteDuNiveau.createStaticLayer("calque_background_2",this.tileset,0,0);
 
     // chargement du calque calque_plateformes
-    const plateformes = carteDuNiveau.createStaticLayer(
-        "calque_plateformes",
-        tileset
-    );
+    this.plateformes = this.carteDuNiveau.createStaticLayer("calque_plateformes",this.tileset,0,0);
  
-    plateformes.setCollisionByProperty({ estSolide: true });
 
+
+
+    //plateformes.setCollisionByProperty({ estSolide: true });
+    this.plateformes.setCollisionByExclusion(-1, true);
 
     // The player and its settings
     player = this.physics.add.sprite(100, 450, 'dude');
@@ -119,7 +103,7 @@ function create ()
     //  Input Events
     cursors = this.input.keyboard.createCursorKeys();
 
-    this.physics.add.collider(player, plateformes);
+    this.physics.add.collider(player, this.plateformes);
 }
 
 function update ()

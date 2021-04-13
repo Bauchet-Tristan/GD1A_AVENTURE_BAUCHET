@@ -4,18 +4,17 @@ class lvl1 extends Phaser.Scene //
     constructor()
     {
         super("lvl1"); //nom = menu
-
     }
 
     init(data)
     {
         //dispo partout
-
     }
 
 
     preload()
     {
+        this.change=0;
         this.load.image('sky', 'assets/sky.png');
         this.load.image('ground', 'assets/platform.png');
         this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
@@ -91,6 +90,7 @@ class lvl1 extends Phaser.Scene //
     
         if (cursors.left.isDown)
         {
+            this.scene.start("Menu");
             player.setVelocityX(-160);
     
             player.anims.play('left', true);
@@ -111,19 +111,20 @@ class lvl1 extends Phaser.Scene //
         if (cursors.up.isDown && player.body.blocked.down) 
         {
             player.setVelocityY(-360);
+            
         }  
-
-        this.scene.setVisible(false);
+        
+        //this.scene.setVisible(false);
     }
 }
 
 function Touching()
 {
     score ++;
-
+    console.log(score);
     if(score == 200)
     {
-        
+        console.log("200woaw");
     }
 
 }

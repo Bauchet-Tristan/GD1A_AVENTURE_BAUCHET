@@ -13,27 +13,35 @@ class Menu extends Phaser.Scene //
 
     preload()
     {
-
+        this.change=0;
     }
 
     create()
     {
-        this.add.text(20,20, "menu");
-        
+        this.add.text(20,20, "menu");  
+        cursors = this.input.keyboard.createCursorKeys();
     }
+
+    
 
     update()
     {
         score ++;
         console.log(score);
-        if(score == 50)
+
+        if(cursors.up.isDown)
         {  
-            this.scene.setVisible(false);
-            this.scene.sleep("Menu");
+            this.change=1;
         }
+
+        if (cursors.up.isUp && this.change==1 )
+        {
+            this.change=0;
+            this.scene.start("lvl1");
+        }
+
         else if(score == 100)
         {
-            this.scene.setVisible(true);
             console.log("tes revenu woaw");
         }
     }
