@@ -1,11 +1,11 @@
 var config = {
     type: Phaser.AUTO,
-    width: 3200,
-    height: 640,
+    width: 1600,
+    height: 1280,
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 340 },
+            gravity: { y: 0 },
             debug: true
         }
     },
@@ -22,10 +22,13 @@ var config = {
 
 var player;
 var platforms;
-var cursors;
 var score = 5;
-var platform1;
 var gameOver = false;
+
+//Variable de deplacement//
+
+
+///////////////////////////
 
 
 

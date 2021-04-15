@@ -12,35 +12,44 @@ class lvl1 extends Phaser.Scene //
     }
 
 
-    preload()
+    preload ()
     {
-        this.change=0;
-        this.load.image('sky', 'assets/sky.png');
-        this.load.image('ground', 'assets/platform.png');
+        this.load.image("Phaser_tuilesdejeu", "tuilesJeu.png");
+        this.load.tilemapTiledJSON("carte", "map.json");
+
+        
         this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
     }
 
-    create()
+    create ()
     {
-        //  A simple background for our game
-        this.add.image(400, 300, 'sky');
+        this.left = true;
+        // chargement de la carte
+        this.carteDuNiveau = this.add.tilemap("carte");
 
-        //  The platforms group contains the ground and the 2 ledges we can jump on
-        platforms = this.physics.add.staticGroup();
+        // chargement du jeu de tuiles
+        this.tileset = this.carteDuNiveau.addTilesetImage("tuiles_de_jeu","Phaser_tuilesdejeu");  
+        
+        // chargement du calque calque_background
+        this.backgroundLayer = this.carteDuNiveau.createStaticLayer("calque_background_1",this.tileset,0,0);
 
-        //  Here we create the ground.
-        //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-        platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+        // chargement du calque calque_background_2
+        this.objet = this.carteDuNiveau.createStaticLayer("objet",this.tileset,0,0);
 
-        //  Now let's create some ledges
-        platforms.create(600, 400, 'ground');
-        platforms.create(50, 250, 'ground');
-        platforms.create(750, 220, 'ground');
+        // chargement du calque calque_plateformes
+        this.plateformes = this.carteDuNiveau.createStaticLayer("calque_plateformes",this.tileset,0,0);
+    
 
-        platform1 = platforms.create(500, 500, 'ground');
+
+
+        //plateformes.setCollisionByProperty({ estSolide: true });
+        this.plateformes.setCollisionByExclusion(-1, true);
+
+        this.objet.setCollisionByExclusion(-1, true);
 
         // The player and its settings
-        player = this.physics.add.sprite(100, 450, 'dude');
+        player = this.physics.add.sprite(10, 10, 'dude');
+
 
         //  Player physics properties. Give the little guy a slight bounce.
         player.setCollideWorldBounds(true);
@@ -66,68 +75,97 @@ class lvl1 extends Phaser.Scene //
             repeat: -1
         });
 
-        this.physics.world.setBounds(0, 0, 3200, 640);
-        //  ajout du champs de la caméra de taille identique à celle du monde
-        this.cameras.main.setBounds(0, 0, 3200, 640);
-        // ancrage de la caméra sur le joueur
-        this.cameras.main.startFollow(player);  
-
         //  Input Events
-        cursors = this.input.keyboard.createCursorKeys();
+        this.cursors = this.input.keyboard.createCursorKeys();
 
-        //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
-
-        this.physics.add.collider(player, platforms,Touching);
+        this.physics.add.collider(player, this.plateformes);
+        this.physics.add.collider(player, this.objet);
     }
 
+    
 
-    update()
-    {   
+    update ()
+    {
         if (gameOver)
         {
             return;
         }
-    
-        if (cursors.left.isDown)
+
+        ///////////////////////////////////////////////////
+        /////////////   Déplacement basic :   /////////////   
+
+        /// On enregistre les commandes ///
+        this.left = this.cursors.left.isDown ? true : false;
+        this.right = this.cursors.right.isDown ? true : false;
+        this.up = this.cursors.up.isDown ? true : false;
+        this.down = this.cursors.down.isDown ? true : false;
+
+
+        if (this.left == true)
         {
-            this.scene.start("Menu");
-            player.setVelocityX(-160);
-    
+            player.setVelocityX(-150);
             player.anims.play('left', true);
         }
-        else if (cursors.right.isDown)
+        if (this.right == true)
         {
-            player.setVelocityX(160);
-    
+            player.setVelocityX(150);
             player.anims.play('right', true);
         }
-        else
+        if (this.up == true) 
         {
-            player.setVelocityX(0);
-    
-            player.anims.play('turn');
-        }
-    
-        if (cursors.up.isDown && player.body.blocked.down) 
+            player.setVelocityY(-150);
+        }  
+        if (this.down == true) 
         {
-            player.setVelocityY(-360);
-            
+            player.setVelocityY(150);
         }  
         
-        //this.scene.setVisible(false);
+        ///equilibre la vitesse des deplacement en diagonale
+        if(this.left == true && this.up == true)
+        {
+            player.setVelocityX(-110);
+            player.setVelocityY(-110);
+        }
+
+        if(this.left == true && this.down == true)
+        {
+            player.setVelocityX(-110);
+            player.setVelocityY(110);
+        }
+
+        if(this.right == true && this.down == true)
+        {
+            player.setVelocityX(110);
+            player.setVelocityY(110);
+        }
+
+        if(this.right == true && this.up == true)
+        {
+            player.setVelocityX(110);
+            player.setVelocityY(-110);
+        }
+
+
+        /// stop le player si il ne bouge pas
+        if(this.left == false && this.right == false)
+        {
+            player.setVelocityX(0);
+        }
+
+        if(this.up == false && this.down == false)
+        {
+            player.setVelocityY(0);
+        }
+
+        /// anim neutre
+        if(this.left == false && this.right == false && this.left == false && this.right == false)
+        {
+            player.anims.play('turn', true);
+        }
+////////////////////////////////////////////////////
     }
 }
 
-function Touching()
-{
-    score ++;
-    console.log(score);
-    if(score == 200)
-    {
-        console.log("200woaw");
-    }
-
-}
 
 
 ////////////

@@ -19,7 +19,7 @@ class Menu extends Phaser.Scene //
     create()
     {
         this.add.text(20,20, "menu");  
-        cursors = this.input.keyboard.createCursorKeys();
+        this.cursors = this.input.keyboard.createCursorKeys();
     }
 
     
@@ -29,12 +29,12 @@ class Menu extends Phaser.Scene //
         score ++;
         console.log(score);
 
-        if(cursors.up.isDown)
+        if(this.cursors.up.isDown)
         {  
             this.change=1;
         }
 
-        if (cursors.up.isUp && this.change==1 )
+        if (this.cursors.up.isUp && this.change==1 )
         {
             this.change=0;
             this.scene.start("lvl1");
@@ -42,7 +42,7 @@ class Menu extends Phaser.Scene //
 
         else if(score == 100)
         {
-            console.log("tes revenu woaw");
+            this.scene.start("lvl1");
         }
     }
 
