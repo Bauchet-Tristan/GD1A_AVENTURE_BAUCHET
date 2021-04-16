@@ -40,7 +40,7 @@ class Menu extends Phaser.Scene //
             this.scene.start("lvl1");
         }
 
-        else if(score == 100)
+        else if(score >= 1)
         {
             this.scene.start("lvl1");
         }
