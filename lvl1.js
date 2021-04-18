@@ -18,6 +18,8 @@ class lvl1 extends Phaser.Scene //
         this.load.tilemapTiledJSON("carte", "map.json");
 
         this.load.image("knife","assets/Knife.png");
+        this.load.image("key","assets/Key.jpg");
+        this.load.image("door","assets/Door.png");
         
         this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 42 });
         this.load.spritesheet('wolf', 'assetsSide/wolf.png', { frameWidth: 211, frameHeight: 106 });
@@ -25,6 +27,7 @@ class lvl1 extends Phaser.Scene //
 
     create ()
     {
+
         // chargement de la carte
         this.carteDuNiveau = this.add.tilemap("carte");
 
@@ -34,23 +37,28 @@ class lvl1 extends Phaser.Scene //
         // chargement du calque calque_background
         this.backgroundLayer = this.carteDuNiveau.createStaticLayer("calque_background_1",this.tileset,0,0);
 
+        //POOORRRTTTEEE
+        door = this.physics.add.staticGroup();
+        door.create(500,300,'door');
+        //
+
         // chargement du calque calque_background_2
         this.objet = this.carteDuNiveau.createStaticLayer("objet",this.tileset,0,0);
 
         // chargement du calque calque_plateformes
         this.plateformes = this.carteDuNiveau.createStaticLayer("calque_plateformes",this.tileset,0,0);
 
-        //plateformes.setCollisionByProperty({ estSolide: true });
-        this.plateformes.setCollisionByExclusion(-1, true);
 
+        this.plateformes.setCollisionByExclusion(-1, true);
         this.objet.setCollisionByExclusion(-1, true);
+        
 
         // The player and its settings
         player = this.physics.add.sprite(10, 10, 'dude');
         player.setCollideWorldBounds(true);
 
         // The ennemi and its settings
-        wolf = this.physics.add.sprite(800, 500, 'wolf').setScale(0.5);
+        wolf = this.physics.add.sprite(700, 500, 'wolf').setScale(0.5);
         wolf.setCollideWorldBounds(true);
 
         this.anims.create({
@@ -87,43 +95,53 @@ class lvl1 extends Phaser.Scene //
             frameRate: 10,
             repeat: -1
         });
+         //  Input Events
+         this.cursors = this.input.keyboard.createCursorKeys();
 
         // affiche vie 
         vieTexte = this.add.text(16, 16, 'vie: 0', { fontSize: '32px', fill: '#999' });
 
-        //  Input Events
-        this.cursors = this.input.keyboard.createCursorKeys();
-
-        //on creer les projetciles
+        //On creer le projetcile
         knives = this.physics.add.image(0,0,'knife');
         knives.disableBody(true,true);
 
-        /*class knives extends Phaser.Physics.Arcade.Sprite
-        {
-            constructor(scene)
-            {
-                super(scene);
-                    this.scene = scene;
-                    this.knives = this.scene.physics.add.image(0,0,'knife');
-            }
-        }
-        
-        knives = new knives(this);*/
+        //on creer l'item qui debloque les projectile
+        knife = this.physics.add.image(150,150,'knife');
 
+        //on creer les Keys
+        key = this.physics.add.image(0,0,'key');
+        key.disableBody(true,true);
 
 //////////player Collider//////////
         this.physics.add.collider(player, this.plateformes);
-        this.physics.add.collider(player, this.objet);
+        this.physics.add.overlap(player, knife,KnifePlayer);
 
         //Wolf collider
         this.physics.add.collider(wolf, this.plateformes);
         this.physics.add.collider(wolf, player,PlayerWolf);
-    }
 
+        //door collider
+        this.physics.add.collider(player, door,PlayerDoor);
+        this.physics.add.collider(wolf, door);
+
+    }
     
+//////////////
+//////////////
+//////////////
+//////////////
+//////////////
+//////////////      Update
+//////////////
+//////////////
+//////////////
+//////////////
+//////////////
+//////////////
 
     update ()
     {
+
         if (gameOver)
         {
             player.x = 30;
@@ -132,6 +150,16 @@ class lvl1 extends Phaser.Scene //
             gameOver = false;
             //return;
         }
+
+        //key drop
+        if(wolfDead==true)
+        {
+            key = this.physics.add.image(wolf.x, wolf.y,'key');
+            this.physics.add.collider(player, key,PlayerKey);
+            wolfDead=false;
+        }
+       
+
 
         //Var timer update : //
         invulnerable++;
@@ -161,20 +189,24 @@ class lvl1 extends Phaser.Scene //
 
         if (this.left == true)
         {
+            lastDirection ="left";
             player.setVelocityX(-150);
             player.anims.play('left', true);
         }
         if (this.right == true)
         {
+            lastDirection ="right";
             player.setVelocityX(150);
             player.anims.play('right', true);
         }
         if (this.up == true) 
         {
+            lastDirection ="up";
             player.setVelocityY(-150);
         }  
         if (this.down == true) 
         {
+            lastDirection ="down";
             player.setVelocityY(150);
         }  
         
@@ -228,37 +260,74 @@ class lvl1 extends Phaser.Scene //
 
         if(this.space == true)
         {
-            if(timerknives>=100 && knivesOut == false)
+            if(knifeUnlock==true)
             {
-                timerknives = 0;
-            }
+                if(timerknives>=100 && knivesOut == false)
+                {
+                    timerknives = 0;
+                }
 
-            if(timerknives==0)
-            {
-                knives = this.physics.add.image(player.x+10, player.y, 'knife')
-                //knife collide
-                this.physics.add.collider(knives, this.plateformes,KnivesDisable);
-                this.physics.add.collider(knives, wolf,KnivesWolf);
-                //
-                knivesOut = true;
+                if(timerknives==0)
+                {
+                    knives = this.physics.add.image(player.x, player.y, 'knife');
+                    //knife collide
+                    this.physics.add.collider(knives, this.plateformes,KnivesDisable);
+                    this.physics.add.collider(knives, wolf,KnivesWolf); 
+                    this.physics.add.collider(knives, door,KnivesDisable);
+                    KnivesThrow();
+                }
+            }
+            else{ 
+                console.log("pas encore debloquer le couteau");
             }
         }
-
-        if(knivesOut==true)
-        {
-            KnivesThrow();
-        }
-
         if(timerknives>=100 && knivesOut == true)
         {
             KnivesDisable();
-        }
+        }       
     }
+}
+
+function PlayerDoor()
+{
+    if(keyNumber==1)
+    {
+        door.destroy(true,true);
+    }    
+}
+
+function PlayerKey()
+{
+    key.disableBody(true,true);
+    keyNumber++;
+}
+
+function KnifePlayer()
+{
+    knifeUnlock = true;
+    knife.disableBody(true,true);
 }
 
 function KnivesThrow()
 {
-    knives.setVelocityX(400); 
+    if(lastDirection =="left" && knivesOut==false)
+    {
+        knives.setVelocityX(-400);    
+    }
+    else if(lastDirection =="right"&& knivesOut==false)
+    {
+        knives.setVelocityX(400); 
+    }
+    else if(lastDirection =="up"&& knivesOut==false)
+    {
+        knives.setVelocityY(-400); 
+    }
+    else if(lastDirection =="down"&& knivesOut==false)
+    {
+        knives.setVelocityY(400); 
+    }
+
+    knivesOut = true;
 }
 
 function KnivesDisable()
@@ -271,6 +340,7 @@ function KnivesWolf()
 {
     KnivesDisable();
     wolf.disableBody(true,true);
+    wolfDead =true;
 }
 
 
@@ -281,7 +351,7 @@ function Wolf()
     // Ennemi patern
     
     timeMove = timeMove+1;
-
+    wolf.setVelocityY(0);
     if(timeMove <= 150)
     {
         wolf.anims.play('WolfLeft',true);

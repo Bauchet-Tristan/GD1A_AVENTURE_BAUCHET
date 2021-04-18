@@ -20,6 +20,8 @@ var config = {
 //this.droitText = this.add.text(20,20,(''), { fontSize: '22px', fill: '#FFF' }).setScrollFactor(0);
 //this.droitText.setText('Droit = ' + this.droit);
 
+//plateformes.setCollisionByProperty({ estSolide: true });
+
 
 //var temporaire
 var score = 5;
@@ -30,16 +32,23 @@ var gameOver = false;
 
 //////var joueur//////
 var player;
+var lastDirection ="left";
 
 //vie
 var vie = 1;
 var invulnerable=200;
 
 //Armes
+var knife;
+var knifeUnlock = false;
 var knives;
 var timerknives = 200;
 var knivesOut = false;
 
+//Key-door
+var key;
+var door;
+var keyNumber=0;
 
 
 
@@ -47,12 +56,23 @@ var knivesOut = false;
 //enemie
 var wolf;
 var timeMove =0;
+var wolfDead = false;
 
 //Variable de deplacement//
 
 
 ///////////////////////////
 
-
+        /*class knives extends Phaser.Physics.Arcade.Sprite
+        {
+            constructor(scene)
+            {
+                super(scene);
+                    this.scene = scene;
+                    this.knives = this.scene.physics.add.image(0,0,'knife');
+            }
+        }
+        
+        knives = new knives(this);*/
 
 var game = new Phaser.Game(config);
