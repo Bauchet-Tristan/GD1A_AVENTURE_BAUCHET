@@ -142,6 +142,7 @@ function KnivesDisable()
 function KnivesWolf()
 {
     KnivesDisable();
+    wolf1=false;
     wolf.disableBody(true,true);
     wolfDead =true;
 }

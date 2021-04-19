@@ -56,6 +56,7 @@ var knivesOut = false;
 
 //Key-door
 var key;
+var key1=true;
 var door;
 var door1=false;
 var keyNumber=0;
@@ -65,7 +66,9 @@ var keyNumber=0;
 //enemie
 var wolf;
 var timeMove =0;
-var wolfDead;
+var wolfDead1=false;
+var wolfDead2=false;
+var wolf1=true;
 
 //Variable de deplacement//
 

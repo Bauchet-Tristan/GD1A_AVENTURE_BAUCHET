@@ -47,7 +47,7 @@ class lvl1 extends Phaser.Scene //
         
 
         // The player and its settings
-        player = this.physics.add.sprite(820, 10, 'dude');
+        player = this.physics.add.sprite(100, 10, 'dude');
         player.setCollideWorldBounds(true);
 
         //---Camera
@@ -56,8 +56,8 @@ class lvl1 extends Phaser.Scene //
         this.cameras.main.startFollow(player,true,1,1);
 
         // The ennemi and its settings
-        wolf = this.physics.add.sprite(700, 500, 'wolf').setScale(0.5);
-        wolf.setCollideWorldBounds(true);
+        this.wolf = this.physics.add.sprite(700, 500, 'wolf').setScale(0.5);
+        this.wolf.setCollideWorldBounds(true);
 
         
         //  Input Events
@@ -83,12 +83,12 @@ class lvl1 extends Phaser.Scene //
         this.physics.add.overlap(player, knife,KnifePlayer);
 
         //Wolf collider
-        this.physics.add.collider(wolf, this.plateformes);
-        this.physics.add.collider(wolf, player,PlayerWolf);
+        this.physics.add.collider(this.wolf, this.plateformes);
+        this.physics.add.collider(this.wolf, player,PlayerWolf);
 
         //door collider
         this.physics.add.collider(player, door,PlayerDoor);
-        this.physics.add.collider(wolf, door);
+        this.physics.add.collider(this.wolf, door);
 
         
                 
@@ -102,7 +102,6 @@ class lvl1 extends Phaser.Scene //
         cursors.up.reset();
         cursors.down.reset();
         
-
     }
     
 //////////////
@@ -122,11 +121,7 @@ class lvl1 extends Phaser.Scene //
 
     update ()
     {
-        if(door1==true)
-        {
-            door.destroy(true,true);
-        }
-
+       
         if (gameOver)
         {
             player.x = 30;
@@ -136,12 +131,23 @@ class lvl1 extends Phaser.Scene //
             //return;
         }
 
-        //key drop
-        if(wolfDead==true)
+        if(door1==true)
         {
-            key = this.physics.add.image(wolf.x, wolf.y,'key');
-            this.physics.add.collider(player, key,PlayerKey);
-            wolfDead=false;
+            door.destroy(true,true);
+        }
+
+        //key drop
+
+        if(wolfDead1==true)
+        {
+            this.wolf.disableBody(true,true);
+
+            if(key1==true)
+            {
+                key = this.physics.add.image(this.wolf.x, this.wolf.y,'key');
+                this.physics.add.collider(player, key,PlayerKey);
+                key1=false;
+            }
         }
        
 
@@ -154,7 +160,7 @@ class lvl1 extends Phaser.Scene //
 
 
         //fonction  l'ennemie--wolf//
-        Wolf();
+        this.Wolf();
 
 //////////////Fonction UI//////////////
         //Actualise la vie
@@ -256,9 +262,9 @@ class lvl1 extends Phaser.Scene //
                 if(timerknives==0)
                 {
                     knives = this.physics.add.image(player.x, player.y, 'knife');
-                    //knife collide
+                    //knives collide
                     this.physics.add.collider(knives, this.plateformes,KnivesDisable);
-                    this.physics.add.collider(knives, wolf,KnivesWolf); 
+                    this.physics.add.collider(knives, this.wolf,this.KnivesWolf); 
                     this.physics.add.collider(knives, door,KnivesDisable);
                     KnivesThrow();
                 }
@@ -285,7 +291,38 @@ class lvl1 extends Phaser.Scene //
         }
         
     }
+
+    KnivesWolf()
+    {
+        KnivesDisable();
+        wolfDead1 = true;
+    }
+
+
+    Wolf()
+    {
+       // Ennemi patern
+        timeMove = timeMove+1;
+        this.wolf.setVelocityY(0);
+        if(timeMove <= 150)
+        {
+            this.wolf.anims.play('WolfLeft',true);
+            this.wolf.setVelocityX(-400);
+        }
+        else if(timeMove > 150 && timeMove <=300 )
+        {
+            this.wolf.anims.play('WolfRight',true);
+            this.wolf.setVelocityX(400);
+        }
+        else
+        {
+            timeMove =  0;
+        }
+    }
 }
+
+
+
 
 
 
