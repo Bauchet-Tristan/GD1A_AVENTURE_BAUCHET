@@ -36,18 +36,20 @@ var right;
 var up;
 var down;
 var space;
-
 var cursors;
 
 //////var joueur//////
 var player;
 var lastDirection ="left";
+var playerY=10;
+var playerX=30;
 
 //vie
 var vie = 1;
 var invulnerable=200;
 
 //Armes
+var knifeUI;
 var knife;
 var knifeUnlock = false;
 var knives;
@@ -55,6 +57,7 @@ var timerknives = 200;
 var knivesOut = false;
 
 //Key-door
+var keyUI
 var key;
 var key1=true;
 var door;

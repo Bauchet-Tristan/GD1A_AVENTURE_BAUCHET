@@ -18,7 +18,9 @@ class Menu extends Phaser.Scene //
         this.load.spritesheet('wolf', 'assetsSide/wolf.png', { frameWidth: 211, frameHeight: 106 });
 
         this.load.image("knife","assets/Knife.png");
-        this.load.image("key","assets/Key.jpg");
+        this.load.image("knifeUI","assets/KnifeInventory.png");
+        this.load.image("key","assets/Key.png");
+        this.load.image("keyUI","assets/KeyInventory.png");
         this.load.image("door","assets/Door.png");
     }
 
@@ -68,12 +70,10 @@ class Menu extends Phaser.Scene //
     update()
     {
         score ++;
-        console.log(score);
 
         if(score >= 1)
         {
             this.scene.start("lvl1");
-            console.log(score);
         }
     }
 
@@ -93,24 +93,39 @@ function KnifePlayer()
 {
     knifeUnlock = true;
     knife.disableBody(true,true);
+    knifeUI.setAlpha(1);
 }
 
 function KnivesThrow()
 {
+    knives.setScale(1.8);
     if(lastDirection =="left" && knivesOut==false)
     {
+        knives.rotation +=3.15;
+
+        knives.body.setSize(29,15);
+        knives.body.setOffset(6,7);
+
         knives.setVelocityX(-400);    
     }
     else if(lastDirection =="right"&& knivesOut==false)
     {
         knives.setVelocityX(400); 
+        knives.body.setSize(29,15);
+        knives.body.setOffset(6,7);
     }
     else if(lastDirection =="up"&& knivesOut==false)
     {
+        knives.rotation +=-1.55;
+        knives.body.setSize(15,22);
+        knives.body.setOffset(12,4);
         knives.setVelocityY(-400); 
     }
     else if(lastDirection =="down"&& knivesOut==false)
     {
+        knives.rotation += 1.55;
+        knives.body.setSize(17,22);
+        knives.body.setOffset(12,4);
         knives.setVelocityY(400); 
     }
 

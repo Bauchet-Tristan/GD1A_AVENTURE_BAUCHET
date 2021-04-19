@@ -1,10 +1,12 @@
+Controlle manette
 
-Scene operationelle : retenir position joueur X Y.
 
-Affichage ressource
+//Info2d : Vie, rubis, "phantome"//
+
+Affichage ressource "La vie et rubis".+
 
 Recupèrer de la vie au SOL
 
 ennemi drop de l'argent
 
-faire une fontaine qui donne une clef contre de l'argent
+faire un "phantome" qui donne une clef contre de l'argent.

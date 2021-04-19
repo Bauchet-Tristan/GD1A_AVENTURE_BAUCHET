@@ -42,8 +42,11 @@ class lvl2 extends Phaser.Scene //
         
 
         // The player and its settings
-        player = this.physics.add.sprite(10, 10, 'dude');
+        player = this.physics.add.sprite(10, playerY, 'dude');
         player.setCollideWorldBounds(true);
+
+        player.body.setSize(28,15);
+        player.body.setOffset(2,25);
 
         //---Camera
         this.cameras.main.setSize(960,540);
@@ -65,11 +68,14 @@ class lvl2 extends Phaser.Scene //
         knives = this.physics.add.image(0,0,'knife');
         knives.disableBody(true,true);
 
-        //on creer l'item qui debloque les projectile
+        knifeUI=this.physics.add.image(800,510,'knifeUI').setScrollFactor(0,0);
+        knifeUI.setScale(1.8);
+        knifeUI.setAlpha(0);
 
-        //on creer les Keys
-        key = this.physics.add.image(0,0,'key');
-        key.disableBody(true,true);
+
+        keyUI=this.physics.add.image(800,440,'keyUI').setScrollFactor(0,0);
+        keyUI.setScale(1.8);
+        keyUI.setAlpha(0);
 
 //////////player Collider//////////
         this.physics.add.collider(player, this.Lvl2Tp,Tplvl);
@@ -130,9 +136,6 @@ class lvl2 extends Phaser.Scene //
         invulnerable++;
         timerknives++;
 
-        //fonction ARMES : //
-
-
         //fonction  l'ennemie--wolf//
         this.Wolf();
 
@@ -140,7 +143,16 @@ class lvl2 extends Phaser.Scene //
         //Actualise la vie
         Life();
 
-        
+        if(keyNumber>=1)
+        {
+            keyUI.setAlpha(1);
+        }
+
+        if(knifeUnlock==true)
+        {
+            knifeUI.setAlpha(1); 
+        }
+
         
         ///////////////////////////////////////////////////
         /////////////   Déplacement basic :   /////////////   
@@ -258,6 +270,7 @@ class lvl2 extends Phaser.Scene //
         if(tp==true)
         {
             this.scene.start("lvl1");
+            playerX = 850;
             tp=false;
         }
         else

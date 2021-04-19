@@ -47,8 +47,11 @@ class lvl1 extends Phaser.Scene //
         
 
         // The player and its settings
-        player = this.physics.add.sprite(100, 10, 'dude');
+        player = this.physics.add.sprite(playerX, playerY, 'dude');
         player.setCollideWorldBounds(true);
+
+        player.body.setSize(28,15);
+        player.body.setOffset(2,25);
 
         //---Camera
         this.cameras.main.setSize(960,540);
@@ -71,11 +74,24 @@ class lvl1 extends Phaser.Scene //
         knives.disableBody(true,true);
 
         //on creer l'item qui debloque les projectile
-        knife = this.physics.add.image(150,150,'knife');
+        knife = this.physics.add.image(150,150,'knife').setScale(1.8);
+
+        knife.body.setSize(29,15);
+        knife.body.setOffset(6,7);
+
+        knifeUI=this.physics.add.image(800,510,'knifeUI').setScrollFactor(0,0);
+        knifeUI.setScale(1.8);
+        knifeUI.setAlpha(0);
 
         //on creer les Keys
         key = this.physics.add.image(0,0,'key');
         key.disableBody(true,true);
+
+        keyUI=this.physics.add.image(800,440,'keyUI').setScrollFactor(0,0);
+        keyUI.setScale(1.8);
+        keyUI.setAlpha(0);
+
+
 
 //////////player Collider//////////
         this.physics.add.collider(player, this.Lvl2Tp,Tplvl);
@@ -121,7 +137,6 @@ class lvl1 extends Phaser.Scene //
 
     update ()
     {
-       
         if (gameOver)
         {
             player.x = 30;
@@ -130,6 +145,8 @@ class lvl1 extends Phaser.Scene //
             gameOver = false;
             //return;
         }
+
+        playerY=player.y;
 
         if(door1==true)
         {
@@ -165,6 +182,16 @@ class lvl1 extends Phaser.Scene //
 //////////////Fonction UI//////////////
         //Actualise la vie
         Life();
+
+        if(keyNumber>=1)
+        {
+            keyUI.setAlpha(1);
+        }
+
+        if(knifeUnlock==true)
+        {
+            knifeUI.setAlpha(1); 
+        }
 
         
         
