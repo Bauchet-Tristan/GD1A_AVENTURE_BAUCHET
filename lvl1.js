@@ -3,7 +3,7 @@ class lvl1 extends Phaser.Scene //
 {
     constructor()
     {
-        super("lvl1"); //nom = menu
+        super("lvl1"); 
     }
 
     init(data)
@@ -16,18 +16,11 @@ class lvl1 extends Phaser.Scene //
     {
         this.load.image("Phaser_tuilesdejeu", "tuilesJeu.png");
         this.load.tilemapTiledJSON("carte", "map.json");
-
-        this.load.image("knife","assets/Knife.png");
-        this.load.image("key","assets/Key.jpg");
-        this.load.image("door","assets/Door.png");
-        
-        this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 42 });
-        this.load.spritesheet('wolf', 'assetsSide/wolf.png', { frameWidth: 211, frameHeight: 106 });
     }
 
     create ()
     {
-
+        
         // chargement de la carte
         this.carteDuNiveau = this.add.tilemap("carte");
 
@@ -43,60 +36,32 @@ class lvl1 extends Phaser.Scene //
         //
 
         // chargement du calque calque_background_2
-        this.objet = this.carteDuNiveau.createStaticLayer("objet",this.tileset,0,0);
+        this.Lvl2Tp = this.carteDuNiveau.createStaticLayer("Lvl-tp",this.tileset,0,0);
 
         // chargement du calque calque_plateformes
         this.plateformes = this.carteDuNiveau.createStaticLayer("calque_plateformes",this.tileset,0,0);
 
 
         this.plateformes.setCollisionByExclusion(-1, true);
-        this.objet.setCollisionByExclusion(-1, true);
+        this.Lvl2Tp.setCollisionByExclusion(-1, true);
         
 
         // The player and its settings
-        player = this.physics.add.sprite(10, 10, 'dude');
+        player = this.physics.add.sprite(820, 10, 'dude');
         player.setCollideWorldBounds(true);
+
+        //---Camera
+        this.cameras.main.setSize(960,540);
+        this.cameras.main.setBounds(0,0,850,650);
+        this.cameras.main.startFollow(player,true,1,1);
 
         // The ennemi and its settings
         wolf = this.physics.add.sprite(700, 500, 'wolf').setScale(0.5);
         wolf.setCollideWorldBounds(true);
 
-        this.anims.create({
-            key: 'left',
-            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-            frameRate: 10,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'turn',
-            frames: [ { key: 'dude', frame: 4 } ],
-            frameRate: 20
-        });
-
-        this.anims.create({
-            key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-            frameRate: 10,
-            repeat: -1
-        });
-
-        //////animation Wolf//////
-        this.anims.create({
-            key: 'WolfLeft',
-            frames: this.anims.generateFrameNumbers('wolf', { start: 0, end: 11 }),
-            frameRate: 10,
-            repeat: -1
-        });
-    
-        this.anims.create({
-            key: 'WolfRight',
-            frames: this.anims.generateFrameNumbers('wolf', { start: 12, end: 23 }),
-            frameRate: 10,
-            repeat: -1
-        });
-         //  Input Events
-         this.cursors = this.input.keyboard.createCursorKeys();
+        
+        //  Input Events
+        cursors = this.input.keyboard.createCursorKeys();
 
         // affiche vie 
         vieTexte = this.add.text(16, 16, 'vie: 0', { fontSize: '32px', fill: '#999' });
@@ -113,6 +78,7 @@ class lvl1 extends Phaser.Scene //
         key.disableBody(true,true);
 
 //////////player Collider//////////
+        this.physics.add.collider(player, this.Lvl2Tp,Tplvl);
         this.physics.add.collider(player, this.plateformes);
         this.physics.add.overlap(player, knife,KnifePlayer);
 
@@ -124,8 +90,22 @@ class lvl1 extends Phaser.Scene //
         this.physics.add.collider(player, door,PlayerDoor);
         this.physics.add.collider(wolf, door);
 
+        
+                
+        /*left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+        up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+        down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);*/
+
+        cursors.left.reset();
+        cursors.right.reset();
+        cursors.up.reset();
+        cursors.down.reset();
+        
+
     }
     
+//////////////
 //////////////
 //////////////
 //////////////
@@ -139,8 +119,13 @@ class lvl1 extends Phaser.Scene //
 //////////////
 //////////////
 
+
     update ()
     {
+        if(door1==true)
+        {
+            door.destroy(true,true);
+        }
 
         if (gameOver)
         {
@@ -176,35 +161,36 @@ class lvl1 extends Phaser.Scene //
         Life();
 
         
-
+        
         ///////////////////////////////////////////////////
         /////////////   Déplacement basic :   /////////////   
 
         /// On enregistre les commandes ///
-        this.left = this.cursors.left.isDown ? true : false;
-        this.right = this.cursors.right.isDown ? true : false;
-        this.up = this.cursors.up.isDown ? true : false;
-        this.down = this.cursors.down.isDown ? true : false;
+        left=cursors.left.isDown ? true : false;
+        right=cursors.right.isDown ? true : false;
+        up=cursors.up.isDown ? true : false;
+        down=cursors.down.isDown ? true : false;
 
+        //this.left.reset();
 
-        if (this.left == true)
+        if (left==true)
         {
             lastDirection ="left";
             player.setVelocityX(-150);
             player.anims.play('left', true);
         }
-        if (this.right == true)
+        if (right == true)
         {
             lastDirection ="right";
             player.setVelocityX(150);
             player.anims.play('right', true);
         }
-        if (this.up == true) 
+        if (up == true) 
         {
             lastDirection ="up";
             player.setVelocityY(-150);
         }  
-        if (this.down == true) 
+        if (down == true) 
         {
             lastDirection ="down";
             player.setVelocityY(150);
@@ -212,43 +198,43 @@ class lvl1 extends Phaser.Scene //
         
 
         ///equilibre la vitesse des deplacement en diagonale
-        if(this.left == true && this.up == true)
+        if(left == true && up == true)
         {
             player.setVelocityX(-110);
             player.setVelocityY(-110);
         }
 
-        if(this.left == true && this.down == true)
+        if(left == true && down == true)
         {
             player.setVelocityX(-110);
             player.setVelocityY(110);
         }
 
-        if(this.right == true && this.down == true)
+        if(right == true && down == true)
         {
             player.setVelocityX(110);
             player.setVelocityY(110);
         }
 
-        if(this.right == true && this.up == true)
+        if(right == true && up == true)
         {
             player.setVelocityX(110);
             player.setVelocityY(-110);
         }
 
         /// stop le player si il ne bouge pas
-        if(this.left == false && this.right == false)
+        if(left == false && right == false)
         {
             player.setVelocityX(0);
         }
 
-        if(this.up == false && this.down == false)
+        if(up == false && down == false)
         {
             player.setVelocityY(0);
         }
 
         /// anim neutre
-        if(this.left == false && this.right == false && this.left == false && this.right == false)
+        if(left == false && right == false && left == false && right == false)
         {
             player.anims.play('turn', true);
         }
@@ -256,9 +242,9 @@ class lvl1 extends Phaser.Scene //
 ///////////////////////////////////////////////////////////
 
         ////lancer armes////
-        this.space = this.cursors.space.isDown ? true : false;
+        space=cursors.space.isDown ? true : false;
 
-        if(this.space == true)
+        if(space == true)
         {
             if(knifeUnlock==true)
             {
@@ -277,124 +263,32 @@ class lvl1 extends Phaser.Scene //
                     KnivesThrow();
                 }
             }
-            else{ 
+            else
+            { 
                 console.log("pas encore debloquer le couteau");
             }
         }
+
         if(timerknives>=100 && knivesOut == true)
         {
             KnivesDisable();
-        }       
+        }  
+        
+        //console.log(tp);
+        if(tp==true)
+        {
+            this.scene.start("lvl2");
+            tp=false;
+        }
+        else
+        {   
+        }
+        
     }
 }
 
-function PlayerDoor()
-{
-    if(keyNumber==1)
-    {
-        door.destroy(true,true);
-    }    
-}
-
-function PlayerKey()
-{
-    key.disableBody(true,true);
-    keyNumber++;
-}
-
-function KnifePlayer()
-{
-    knifeUnlock = true;
-    knife.disableBody(true,true);
-}
-
-function KnivesThrow()
-{
-    if(lastDirection =="left" && knivesOut==false)
-    {
-        knives.setVelocityX(-400);    
-    }
-    else if(lastDirection =="right"&& knivesOut==false)
-    {
-        knives.setVelocityX(400); 
-    }
-    else if(lastDirection =="up"&& knivesOut==false)
-    {
-        knives.setVelocityY(-400); 
-    }
-    else if(lastDirection =="down"&& knivesOut==false)
-    {
-        knives.setVelocityY(400); 
-    }
-
-    knivesOut = true;
-}
-
-function KnivesDisable()
-{
-    knives.disableBody(true,true);
-    knivesOut = false;
-}
-
-function KnivesWolf()
-{
-    KnivesDisable();
-    wolf.disableBody(true,true);
-    wolfDead =true;
-}
 
 
-function Wolf()
-{
-    ///////////////////////////////////////////////////////  Ennemie  ////////////////////////////////////////////////////////////
-
-    // Ennemi patern
-    
-    timeMove = timeMove+1;
-    wolf.setVelocityY(0);
-    if(timeMove <= 150)
-    {
-        wolf.anims.play('WolfLeft',true);
-        wolf.setVelocityX(-400);
-    }
-    else if(timeMove > 150 && timeMove <=300 )
-    {
-        wolf.anims.play('WolfRight',true);
-        wolf.setVelocityX(400);
-    }
-    else
-    {
-        timeMove =  0;
-    }
-}
-
-function PlayerWolf()
-{   
-    LoseLife();
-}
-
-function LoseLife()
-{   
-    if(invulnerable >= 200)
-    {
-        invulnerable = 0;
-    }
-    if(invulnerable==0)
-    {
-        vie = vie-1;
-    }      
-}
-
-function Life()
-{   
-    //affichage
-    vieTexte.setText('vie= ' + vie);
-
-    if(vie<=0)
-    {
-        gameOver=true;
-    }
-}
 
 
 ////////////

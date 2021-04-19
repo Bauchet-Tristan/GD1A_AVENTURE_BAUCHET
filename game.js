@@ -1,7 +1,7 @@
 var config = {
     type: Phaser.AUTO,
-    width: 1600,
-    height: 1280,
+    width: 850,
+    height: 650,
     physics: {
         default: 'arcade',
         arcade: {
@@ -9,7 +9,7 @@ var config = {
             debug: true
         }
     },
-    scene: [Menu,lvl1],
+    scene: [Menu,lvl1,lvl2],
     scale: {
         zoom: 2
     }
@@ -29,6 +29,15 @@ var vieTexte;
 
 //var globale
 var gameOver = false;
+var tp=false;
+
+var left;
+var right;
+var up;
+var down;
+var space;
+
+var cursors;
 
 //////var joueur//////
 var player;
@@ -48,15 +57,15 @@ var knivesOut = false;
 //Key-door
 var key;
 var door;
+var door1=false;
 var keyNumber=0;
-
 
 
 
 //enemie
 var wolf;
 var timeMove =0;
-var wolfDead = false;
+var wolfDead;
 
 //Variable de deplacement//
 
