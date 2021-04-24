@@ -1,7 +1,7 @@
 var config = {
     type: Phaser.AUTO,
-    width: 850,
-    height: 650,
+    width: 960,
+    height: 700,
     physics: {
         default: 'arcade',
         arcade: {
@@ -41,7 +41,7 @@ var cursors;
 //////var joueur//////
 var player;
 var lastDirection ="left";
-var playerY=10;
+var playerY=30;
 var playerX=30;
 
 //vie

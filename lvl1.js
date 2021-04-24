@@ -14,7 +14,7 @@ class lvl1 extends Phaser.Scene //
 
     preload ()
     {
-        this.load.image("Phaser_tuilesdejeu", "tuilesJeu.png");
+        this.load.image("Phaser_tuilesdejeu", "TuileGame.png");
         this.load.tilemapTiledJSON("carte", "map.json");
     }
 
@@ -25,14 +25,14 @@ class lvl1 extends Phaser.Scene //
         this.carteDuNiveau = this.add.tilemap("carte");
 
         // chargement du jeu de tuiles
-        this.tileset = this.carteDuNiveau.addTilesetImage("tuiles_de_jeu","Phaser_tuilesdejeu");  
+        this.tileset = this.carteDuNiveau.addTilesetImage("TuileGame","Phaser_tuilesdejeu");  
         
         // chargement du calque calque_background
         this.backgroundLayer = this.carteDuNiveau.createStaticLayer("calque_background_1",this.tileset,0,0);
 
         //POOORRRTTTEEE
         door = this.physics.add.staticGroup();
-        door.create(500,300,'door');
+        door.create(770,256,'door');
         //
 
         // chargement du calque calque_background_2
@@ -50,12 +50,12 @@ class lvl1 extends Phaser.Scene //
         player = this.physics.add.sprite(playerX, playerY, 'dude');
         player.setCollideWorldBounds(true);
 
-        player.body.setSize(28,15);
+        player.body.setSize(28,17);
         player.body.setOffset(2,25);
 
         //---Camera
         this.cameras.main.setSize(960,540);
-        this.cameras.main.setBounds(0,0,850,650);
+        this.cameras.main.setBounds(0,0,950,700);
         this.cameras.main.startFollow(player,true,1,1);
 
         // The ennemi and its settings
@@ -79,7 +79,7 @@ class lvl1 extends Phaser.Scene //
         knife.body.setSize(29,15);
         knife.body.setOffset(6,7);
 
-        knifeUI=this.physics.add.image(800,510,'knifeUI').setScrollFactor(0,0);
+        knifeUI=this.physics.add.image(50,510,'knifeUI').setScrollFactor(0,0);
         knifeUI.setScale(1.8);
         knifeUI.setAlpha(0);
 
@@ -87,7 +87,7 @@ class lvl1 extends Phaser.Scene //
         key = this.physics.add.image(0,0,'key');
         key.disableBody(true,true);
 
-        keyUI=this.physics.add.image(800,440,'keyUI').setScrollFactor(0,0);
+        keyUI=this.physics.add.image(50,440,'keyUI').setScrollFactor(0,0);
         keyUI.setScale(1.8);
         keyUI.setAlpha(0);
 
@@ -147,6 +147,12 @@ class lvl1 extends Phaser.Scene //
         }
 
         playerY=player.y;
+
+        if(knifeUnlock==true)
+        {
+            knife.disableBody();
+            knife.setAlpha(0);
+        }
 
         if(door1==true)
         {
@@ -311,6 +317,7 @@ class lvl1 extends Phaser.Scene //
         if(tp==true)
         {
             this.scene.start("lvl2");
+            playerX=20;
             tp=false;
         }
         else

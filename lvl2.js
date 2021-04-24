@@ -14,7 +14,7 @@ class lvl2 extends Phaser.Scene //
 
     preload ()
     {
-        this.load.image("Phaser_tuilesdejeu", "tuilesJeu.png");
+        this.load.image("Phaser_tuilesdejeu", "TuileGame.png");
         this.load.tilemapTiledJSON("carte", "map.json");
     }
 
@@ -25,16 +25,16 @@ class lvl2 extends Phaser.Scene //
         this.carteDuNiveau = this.add.tilemap("carte");
 
         // chargement du jeu de tuiles
-        this.tileset = this.carteDuNiveau.addTilesetImage("tuiles_de_jeu","Phaser_tuilesdejeu");  
+        this.tileset = this.carteDuNiveau.addTilesetImage("TuileGame","Phaser_tuilesdejeu");  
         
         // chargement du calque calque_background
-        this.backgroundLayer = this.carteDuNiveau.createStaticLayer("calque_background_1",this.tileset,-850,0);
+        this.backgroundLayer = this.carteDuNiveau.createStaticLayer("calque_background_1",this.tileset,-960,0);
 
         // chargement du calque calque_background_2
-        this.Lvl2Tp = this.carteDuNiveau.createStaticLayer("Lvl-tp",this.tileset,-850,0);
+        this.Lvl2Tp = this.carteDuNiveau.createStaticLayer("Lvl-tp",this.tileset,-960,0);
 
         // chargement du calque calque_plateformes
-        this.plateformes = this.carteDuNiveau.createStaticLayer("calque_plateformes",this.tileset,-850,0);
+        this.plateformes = this.carteDuNiveau.createStaticLayer("calque_plateformes",this.tileset,-960,0);
 
 
         this.plateformes.setCollisionByExclusion(-1, true);
@@ -42,15 +42,15 @@ class lvl2 extends Phaser.Scene //
         
 
         // The player and its settings
-        player = this.physics.add.sprite(10, playerY, 'dude');
+        player = this.physics.add.sprite(playerX, playerY, 'dude');
         player.setCollideWorldBounds(true);
 
-        player.body.setSize(28,15);
+        player.body.setSize(28,17);
         player.body.setOffset(2,25);
 
         //---Camera
         this.cameras.main.setSize(960,540);
-        this.cameras.main.setBounds(0,0,850,650);
+        this.cameras.main.setBounds(0,0,950,700);
         this.cameras.main.startFollow(player,true,1,1);
 
         // The ennemi and its settings
@@ -68,12 +68,12 @@ class lvl2 extends Phaser.Scene //
         knives = this.physics.add.image(0,0,'knife');
         knives.disableBody(true,true);
 
-        knifeUI=this.physics.add.image(800,510,'knifeUI').setScrollFactor(0,0);
+        knifeUI=this.physics.add.image(50,510,'knifeUI').setScrollFactor(0,0);
         knifeUI.setScale(1.8);
         knifeUI.setAlpha(0);
 
 
-        keyUI=this.physics.add.image(800,440,'keyUI').setScrollFactor(0,0);
+        keyUI=this.physics.add.image(50,440,'keyUI').setScrollFactor(0,0);
         keyUI.setScale(1.8);
         keyUI.setAlpha(0);
 
@@ -124,6 +124,7 @@ class lvl2 extends Phaser.Scene //
             //return;
         }
 
+        playerY=player.y;
         //key drop
         if(wolfDead2==true)
         {
@@ -270,7 +271,7 @@ class lvl2 extends Phaser.Scene //
         if(tp==true)
         {
             this.scene.start("lvl1");
-            playerX = 850;
+            playerX = 900;
             tp=false;
         }
         else

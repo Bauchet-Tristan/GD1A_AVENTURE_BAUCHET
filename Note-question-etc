@@ -1,12 +1,9 @@
 Controlle manette
 
-
-//Info2d : Vie, rubis, "phantome"//
-
-Affichage ressource "La vie et rubis".+
+Affichage ressource "La vie et rubis".
 
 Recupèrer de la vie au SOL
 
 ennemi drop de l'argent
 
-faire un "phantome" qui donne une clef contre de l'argent.
+faire un "phantom" qui donne une clef contre de l'argent.
