@@ -22,11 +22,6 @@ var config = {
 
 //plateformes.setCollisionByProperty({ estSolide: true });
 
-
-//var temporaire
-var score = 5;
-var vieTexte;
-
 //var globale
 var gameOver = false;
 var tp=false;
@@ -41,12 +36,25 @@ var cursors;
 //////var joueur//////
 var player;
 var lastDirection ="left";
-var playerY=30;
-var playerX=30;
+var playerY=100;
+var playerX=70;
 
 //vie
 var vie = 1;
 var invulnerable=200;
+var vieDrop;
+//Ui
+var lifeFullUI;
+var lifeMidUI;
+var lifeLowUI;
+var lifeOutUI;
+
+//Money
+var moneyUI;
+var moneyDrop;
+var money = 0;
+var moneyTexte;
+var money1 =true;
 
 //Armes
 var knifeUI;
@@ -62,32 +70,19 @@ var key;
 var key1=true;
 var door;
 var door1=false;
+var door2=false;
 var keyNumber=0;
-
-
 
 //enemie
 var wolf;
-var timeMove =0;
+var timeMove=0;
 var wolfDead1=false;
 var wolfDead2=false;
 var wolf1=true;
 
-//Variable de deplacement//
+//Ghost
+var ghost;
 
 
-///////////////////////////
-
-        /*class knives extends Phaser.Physics.Arcade.Sprite
-        {
-            constructor(scene)
-            {
-                super(scene);
-                    this.scene = scene;
-                    this.knives = this.scene.physics.add.image(0,0,'knife');
-            }
-        }
-        
-        knives = new knives(this);*/
 
 var game = new Phaser.Game(config);

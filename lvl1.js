@@ -20,7 +20,13 @@ class lvl1 extends Phaser.Scene //
 
     create ()
     {
-        
+        //  Input Events
+        cursors = this.input.keyboard.createCursorKeys();
+        cursors.left.reset();
+        cursors.right.reset();
+        cursors.up.reset();
+        cursors.down.reset();
+
         // chargement de la carte
         this.carteDuNiveau = this.add.tilemap("carte");
 
@@ -58,38 +64,72 @@ class lvl1 extends Phaser.Scene //
         this.cameras.main.setBounds(0,0,950,700);
         this.cameras.main.startFollow(player,true,1,1);
 
+
+        //Ghost 
+        ghost= this.physics.add.image(700,620,'Ghost');
+        ghost.setScale(2);
+
         // The ennemi and its settings
         this.wolf = this.physics.add.sprite(700, 500, 'wolf').setScale(0.5);
         this.wolf.setCollideWorldBounds(true);
 
         
-        //  Input Events
-        cursors = this.input.keyboard.createCursorKeys();
-
-        // affiche vie 
-        vieTexte = this.add.text(16, 16, 'vie: 0', { fontSize: '32px', fill: '#999' });
-
         //On creer le projetcile
         knives = this.physics.add.image(0,0,'knife');
         knives.disableBody(true,true);
 
         //on creer l'item qui debloque les projectile
-        knife = this.physics.add.image(150,150,'knife').setScale(1.8);
+        knife = this.physics.add.image(50,150,'knife').setScale(1.8);
 
         knife.body.setSize(29,15);
         knife.body.setOffset(6,7);
 
         knifeUI=this.physics.add.image(50,510,'knifeUI').setScrollFactor(0,0);
-        knifeUI.setScale(1.8);
+        knifeUI.setScale(1.4);
         knifeUI.setAlpha(0);
 
         //on creer les Keys
         key = this.physics.add.image(0,0,'key');
         key.disableBody(true,true);
 
+        //keyui
         keyUI=this.physics.add.image(50,440,'keyUI').setScrollFactor(0,0);
-        keyUI.setScale(1.8);
+        keyUI.setScale(1.4);
         keyUI.setAlpha(0);
+
+
+        //VIE
+        lifeFullUI=this.physics.add.image(40,40,'LifeFull').setScrollFactor(0,0);
+        lifeFullUI.setScale(2);
+
+        lifeMidUI=this.physics.add.image(40,40,'LifeMid').setScrollFactor(0,0);
+        lifeMidUI.setScale(2);
+
+        lifeLowUI=this.physics.add.image(40,40,'LifeLow').setScrollFactor(0,0);
+        lifeLowUI.setScale(2);
+
+        lifeOutUI=this.physics.add.image(40,40,'LifeOut').setScrollFactor(0,0);
+        lifeOutUI.setScale(2);
+
+
+        //Life
+        if(vie<=1)
+        {
+            vieDrop = this.physics.add.image(32,400,'LifeLow');
+            vieDrop.setScale(1.3);
+        }
+
+        //Money
+        if(money==0)
+        {
+            moneyDrop = this.physics.add.image(32,300,'Money');
+            moneyDrop.setScale(1.5);
+        }
+
+        //MoneyUI
+        moneyUI = this.physics.add.image(150,40,'MoneyUI').setScrollFactor(0,0);;
+        moneyTexte = this.add.text(160, 20, money, { fontSize: '52px', fill: '#000' }).setScrollFactor(0,0);;
+        moneyUI.setScale(2);
 
 
 
@@ -106,17 +146,25 @@ class lvl1 extends Phaser.Scene //
         this.physics.add.collider(player, door,PlayerDoor);
         this.physics.add.collider(this.wolf, door);
 
+        //Life collide
+        this.physics.add.collider(player, vieDrop,PlayerVie);
+
+        //Money collide
+        this.physics.add.collider(player,moneyDrop,PlayerMoney);
+
+        //Ghost collide
+
+        /* IMPORTANT c'est pour les child d'objet  
+        vieDrop = this.physics.add.group({key: 'LifeLow',repeat: 2,setXY: { x: 32, y: 400, stepY: 50 }});
+        
+        this.physics.add.overlap(player, vieDrop, PlayerVie, null, this);
+        */
         
                 
         /*left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
         down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);*/
-
-        cursors.left.reset();
-        cursors.right.reset();
-        cursors.up.reset();
-        cursors.down.reset();
         
     }
     
@@ -139,9 +187,9 @@ class lvl1 extends Phaser.Scene //
     {
         if (gameOver)
         {
-            player.x = 30;
-            player.y = 30;
-            vie = 3;
+            player.x = 100;
+            player.y = 70;
+            vie = 1;
             gameOver = false;
             //return;
         }
@@ -189,10 +237,7 @@ class lvl1 extends Phaser.Scene //
         //Actualise la vie
         Life();
 
-        if(keyNumber>=1)
-        {
-            keyUI.setAlpha(1);
-        }
+        KeyAffichage();
 
         if(knifeUnlock==true)
         {
@@ -338,6 +383,7 @@ class lvl1 extends Phaser.Scene //
        // Ennemi patern
         timeMove = timeMove+1;
         this.wolf.setVelocityY(0);
+        
         if(timeMove <= 150)
         {
             this.wolf.anims.play('WolfLeft',true);
@@ -355,7 +401,11 @@ class lvl1 extends Phaser.Scene //
     }
 }
 
-
+/*function PlayerVie()
+{
+    vieDrop.disableBody(true, true);
+    //vie++;
+}*/
 
 
 

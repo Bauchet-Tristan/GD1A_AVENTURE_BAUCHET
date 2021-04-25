@@ -15,8 +15,15 @@ class Menu extends Phaser.Scene //
     {
         this.change=0;
         this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 42 });
-        this.load.spritesheet('wolf', 'assetsSide/wolf.png', { frameWidth: 211, frameHeight: 106 });
+        this.load.spritesheet('wolf', 'assets/wolf.png', { frameWidth: 211, frameHeight: 106 });
 
+        this.load.image("Ghost",'assets/Ghost.png');
+        this.load.image("MoneyUI",'assets/MoneyUI.png');
+        this.load.image("Money",'assets/Money.png');
+        this.load.image("LifeFull",'assets/LifeFull.png');
+        this.load.image("LifeMid",'assets/LifeMid.png');
+        this.load.image("LifeLow",'assets/LifeLow.png');
+        this.load.image("LifeOut",'assets/LifeOut.png');
         this.load.image("knife","assets/Knife.png");
         this.load.image("knifeUI","assets/KnifeInventory.png");
         this.load.image("key","assets/Key.png");
@@ -69,18 +76,23 @@ class Menu extends Phaser.Scene //
 
     update()
     {
-        score ++;
-
-        if(score >= 1)
-        {
-            this.scene.start("lvl1");
-        }
+        this.scene.start("lvl1");
     }
 
 }
 
-
-
+function PlayerMoney()
+{
+    moneyDrop.disableBody(true,true);
+    money++;
+    moneyTexte.setText(money);
+}
+   
+function PlayerVie()
+{
+    vieDrop.disableBody(true, true);
+    vie++;
+}
 
 function Tplvl()
 {
@@ -132,15 +144,35 @@ function KnivesThrow()
     knivesOut = true;
 }
 
-
+function KeyAffichage()
+{
+    if(keyNumber>=1)
+    {
+        keyUI.setAlpha(1);
+    }
+    else{
+        keyUI.setAlpha(0);
+    }
+}
 
 function PlayerDoor()
 {
     if(keyNumber>=1)
     {
         door1=true;
+        keyNumber=0;
     }    
 }
+
+function PlayerDoor2()
+{
+    if(keyNumber>=1)
+    {
+        door2=true;
+        keyNumber=0;
+    }    
+}
+
 
 function PlayerKey()
 {
@@ -206,12 +238,41 @@ function LoseLife()
 
 function Life()
 {   
-    //affichage
-    vieTexte.setText('vie= ' + vie);
-
     if(vie<=0)
     {
+        lifeOutUI.setAlpha(1);
         gameOver=true;
+    }
+    else
+    {
+        lifeOutUI.setAlpha(0);
+    }
+
+    if(vie==1)
+    {
+        lifeLowUI.setAlpha(1);
+    }
+    else
+    {
+        lifeLowUI.setAlpha(0);
+    }
+
+    if(vie==2)
+    {
+        lifeMidUI.setAlpha(1);
+    }
+    else{
+        lifeMidUI.setAlpha(0);
+    }
+
+
+    if(vie>=3)
+    {
+        lifeFullUI.setAlpha(1);
+    }
+    else
+    {
+        lifeFullUI.setAlpha(0);
     }
 }
 
