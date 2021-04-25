@@ -50,7 +50,7 @@ class lvl1 extends Phaser.Scene //
 
         this.plateformes.setCollisionByExclusion(-1, true);
         this.Lvl2Tp.setCollisionByExclusion(-1, true);
-        
+    
 
         // The player and its settings
         player = this.physics.add.sprite(playerX, playerY, 'dude');
@@ -61,13 +61,16 @@ class lvl1 extends Phaser.Scene //
 
         //---Camera
         this.cameras.main.setSize(960,540);
-        this.cameras.main.setBounds(0,0,950,700);
+        this.cameras.main.setBounds(0,0,950,830);
         this.cameras.main.startFollow(player,true,1,1);
 
 
         //Ghost 
         ghost= this.physics.add.image(700,620,'Ghost');
         ghost.setScale(2);
+
+        ghostTexte=this.add.image(750, 540, 'GhostTexte');
+
 
         // The ennemi and its settings
         this.wolf = this.physics.add.sprite(700, 500, 'wolf').setScale(0.5);
@@ -120,7 +123,7 @@ class lvl1 extends Phaser.Scene //
         }
 
         //Money
-        if(money==0)
+        if(money==0 && wolfDead1==false)
         {
             moneyDrop = this.physics.add.image(32,300,'Money');
             moneyDrop.setScale(1.5);
@@ -128,12 +131,11 @@ class lvl1 extends Phaser.Scene //
 
         //MoneyUI
         moneyUI = this.physics.add.image(150,40,'MoneyUI').setScrollFactor(0,0);;
-        moneyTexte = this.add.text(160, 20, money, { fontSize: '52px', fill: '#000' }).setScrollFactor(0,0);;
+        moneyTexte = this.add.text(160, 20, money, { fontSize: '52px', fill: '#000' }).setScrollFactor(0,0);
         moneyUI.setScale(2);
 
 
-
-//////////player Collider//////////
+        //////////player Collider//////////
         this.physics.add.collider(player, this.Lvl2Tp,Tplvl);
         this.physics.add.collider(player, this.plateformes);
         this.physics.add.overlap(player, knife,KnifePlayer);
@@ -153,13 +155,13 @@ class lvl1 extends Phaser.Scene //
         this.physics.add.collider(player,moneyDrop,PlayerMoney);
 
         //Ghost collide
+        this.physics.add.overlap(player,ghost,PlayerGhost);
 
         /* IMPORTANT c'est pour les child d'objet  
         vieDrop = this.physics.add.group({key: 'LifeLow',repeat: 2,setXY: { x: 32, y: 400, stepY: 50 }});
         
         this.physics.add.overlap(player, vieDrop, PlayerVie, null, this);
         */
-        
                 
         /*left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
@@ -182,9 +184,9 @@ class lvl1 extends Phaser.Scene //
 //////////////
 //////////////
 
-
     update ()
     {
+
         if (gameOver)
         {
             player.x = 100;
@@ -195,6 +197,35 @@ class lvl1 extends Phaser.Scene //
         }
 
         playerY=player.y;
+
+
+
+        //ghost
+        if(ghostTalk == true)
+        {
+            ghostTexte.setAlpha(1);
+            
+            if(space == true && money==2)
+            {
+                keyNumber++;
+                money=0;
+                moneyTexte.setText(money);
+            }
+        }
+        else
+        {
+            ghostTexte.setAlpha(0);
+        }
+        
+        if(affichageTexte >=2)
+        {
+            ghostTexte.setAlpha(0);
+        }
+
+        affichageTexte++;
+        //
+
+
 
         if(knifeUnlock==true)
         {

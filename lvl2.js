@@ -58,13 +58,14 @@ class lvl2 extends Phaser.Scene //
 
         //---Camera
         this.cameras.main.setSize(960,540);
-        this.cameras.main.setBounds(0,0,950,700);
+        this.cameras.main.setBounds(0,0,950,830);
         this.cameras.main.startFollow(player,true,1,1);
 
         // The ennemi and its settings
         this.wolf = this.physics.add.sprite(700, 500, 'wolf').setScale(0.5);
         this.wolf.setCollideWorldBounds(true);
 
+        winText = this.add.text(300, 400, '', { fontSize: '200px', fill: '#000' });
 
         //On creer le projetcile
         knives = this.physics.add.image(0,0,'knife');
@@ -145,6 +146,12 @@ class lvl2 extends Phaser.Scene //
 
     update ()
     {
+        if(player.x>=850 && player.y>=671)
+        {
+            this.physics.pause();
+            winText.setText("Gagné");
+        }
+
         if (gameOver)
         {
             player.x = 100;
@@ -155,6 +162,7 @@ class lvl2 extends Phaser.Scene //
         }
 
         playerY=player.y;
+
 
         //key drop
         if(wolfDead2==true)
@@ -292,6 +300,7 @@ class lvl2 extends Phaser.Scene //
                     //knives collide
                     this.physics.add.collider(knives, this.plateformes,KnivesDisable);
                     this.physics.add.collider(knives, this.wolf,this.KnivesWolf); 
+                    this.physics.add.collider(knives, door,KnivesDisable);
                     KnivesThrow();
                 }
             }

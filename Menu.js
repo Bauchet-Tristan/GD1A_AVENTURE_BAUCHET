@@ -16,7 +16,8 @@ class Menu extends Phaser.Scene //
         this.change=0;
         this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 42 });
         this.load.spritesheet('wolf', 'assets/wolf.png', { frameWidth: 211, frameHeight: 106 });
-
+        
+        this.load.image("GhostTexte",'assets/GhostTexte.png');
         this.load.image("Ghost",'assets/Ghost.png');
         this.load.image("MoneyUI",'assets/MoneyUI.png');
         this.load.image("Money",'assets/Money.png');
@@ -72,13 +73,18 @@ class Menu extends Phaser.Scene //
         });
     }
 
-    
-
     update()
     {
         this.scene.start("lvl1");
     }
 
+}
+
+
+function PlayerGhost()
+{
+    ghostTalk = true;
+    affichageTexte = 0;
 }
 
 function PlayerMoney()
@@ -97,7 +103,6 @@ function PlayerVie()
 function Tplvl()
 {
     tp=true;
-    console.log("dfv");
 } 
 
 

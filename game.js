@@ -6,7 +6,7 @@ var config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
-            debug: true
+            debug: false
         }
     },
     scene: [Menu,lvl1,lvl2],
@@ -38,6 +38,7 @@ var player;
 var lastDirection ="left";
 var playerY=100;
 var playerX=70;
+var winText;
 
 //vie
 var vie = 1;
@@ -82,7 +83,9 @@ var wolf1=true;
 
 //Ghost
 var ghost;
-
+var ghostTexte;
+var ghostTalk=false;
+var affichageTexte=1;
 
 
 var game = new Phaser.Game(config);
