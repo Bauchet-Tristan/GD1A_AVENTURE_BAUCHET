@@ -9,6 +9,9 @@ var config = {
             debug: false
         }
     },
+    input:{
+        gamepad:true
+    },
     scene: [Menu,lvl1,lvl2],
     scale: {
         zoom: 2
