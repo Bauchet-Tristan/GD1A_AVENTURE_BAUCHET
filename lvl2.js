@@ -51,10 +51,11 @@ class lvl2 extends Phaser.Scene //
 
         // The player and its settings
         player = this.physics.add.sprite(playerX,playerY, 'dude');
+        player.setScale(2);
         player.setCollideWorldBounds(true);
 
-        player.body.setSize(28,17);
-        player.body.setOffset(2,25);
+        player.body.setSize(13,10);
+        player.body.setOffset(2,11);
 
         //---Camera
         this.cameras.main.setSize(960,540);
@@ -220,21 +221,23 @@ class lvl2 extends Phaser.Scene //
             player.setVelocityX(-150);
             player.anims.play('left', true);
         }
-        if (right == true)
+        else if (right == true)
         {
             lastDirection ="right";
             player.setVelocityX(150);
             player.anims.play('right', true);
         }
-        if (up == true) 
+        else if (up == true) 
         {
             lastDirection ="up";
             player.setVelocityY(-150);
+            player.anims.play('up', true);
         }  
-        if (down == true) 
-        {
+        else if (down == true) 
+        {   
             lastDirection ="down";
             player.setVelocityY(150);
+            player.anims.play('down', true);
         }  
         
 
@@ -243,24 +246,28 @@ class lvl2 extends Phaser.Scene //
         {
             player.setVelocityX(-110);
             player.setVelocityY(-110);
+            player.anims.play('left', true);
         }
 
         if(left == true && down == true)
         {
             player.setVelocityX(-110);
             player.setVelocityY(110);
+            player.anims.play('left', true);
         }
 
         if(right == true && down == true)
         {
             player.setVelocityX(110);
             player.setVelocityY(110);
+            player.anims.play('right', true);
         }
 
         if(right == true && up == true)
         {
             player.setVelocityX(110);
             player.setVelocityY(-110);
+            player.anims.play('right', true);
         }
 
         /// stop le player si il ne bouge pas
@@ -275,7 +282,7 @@ class lvl2 extends Phaser.Scene //
         }
 
         /// anim neutre
-        if(left == false && right == false && left == false && right == false)
+        if(left == false && right == false && left == false && right == false && up == false && down == false)
         {
             player.anims.play('turn', true);
         }
