@@ -51,6 +51,9 @@ class lvl1 extends Phaser.Scene //
         this.plateformes.setCollisionByExclusion(-1, true);
         this.Lvl2Tp.setCollisionByExclusion(-1, true);
     
+        
+        //retouche map 
+        this.retouche = this.carteDuNiveau.createStaticLayer("retouche_wall",this.tileset,0,0);
 
         // The player and its settings
         player = this.physics.add.sprite(playerX, playerY, 'dude');
@@ -168,6 +171,10 @@ class lvl1 extends Phaser.Scene //
         right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
         down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);*/
+        cursors.left.reset();
+        cursors.right.reset();
+        cursors.up.reset();
+        cursors.down.reset();
         
     }
     
@@ -314,7 +321,7 @@ class lvl1 extends Phaser.Scene //
             player.anims.play('down', true);
         }
         else{
-            
+
         }  
         
 

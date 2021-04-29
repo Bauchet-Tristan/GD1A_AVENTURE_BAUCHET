@@ -45,6 +45,9 @@ class lvl2 extends Phaser.Scene //
         this.plateformes.setCollisionByExclusion(-1, true);
         this.Lvl2Tp.setCollisionByExclusion(-1, true);
         
+        //retouche map 
+        this.retouche = this.carteDuNiveau.createStaticLayer("retouche_wall",this.tileset,-960,0);
+
         //porte
         door = this.physics.add.staticGroup();
         door.create(897,671,'door');
@@ -127,6 +130,10 @@ class lvl2 extends Phaser.Scene //
         right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
         down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);*/
+        cursors.left.reset();
+        cursors.right.reset();
+        cursors.up.reset();
+        cursors.down.reset();
     }
     
 //////////////
@@ -147,7 +154,7 @@ class lvl2 extends Phaser.Scene //
 
     update ()
     {
-        if(player.x>=850 && player.y>=671)
+        if(player.x>=830 && player.y>=671)
         {
             this.physics.pause();
             winText.setText("Gagné");
