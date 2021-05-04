@@ -20,6 +20,7 @@ class lvl1 extends Phaser.Scene //
 
     create ()
     {
+
         //  Input Events
         cursors = this.input.keyboard.createCursorKeys();
         cursors.left.reset();
@@ -175,7 +176,6 @@ class lvl1 extends Phaser.Scene //
         cursors.right.reset();
         cursors.up.reset();
         cursors.down.reset();
-        
     }
     
 //////////////
@@ -194,7 +194,6 @@ class lvl1 extends Phaser.Scene //
 
     update ()
     {
-
         if (gameOver)
         {
             player.x = 100;
@@ -286,13 +285,79 @@ class lvl1 extends Phaser.Scene //
         
         
         ///////////////////////////////////////////////////
-        /////////////   Déplacement basic :   /////////////   
+        /////////////////   Constrole :   /////////////////   
 
         /// On enregistre les commandes ///
-        left=cursors.left.isDown ? true : false;
-        right=cursors.right.isDown ? true : false;
-        up=cursors.up.isDown ? true : false;
-        down=cursors.down.isDown ? true : false;
+        this.input.gamepad.once('connected', function (pad) {paddleConnected = true;paddle = pad;});
+        
+        if(paddleConnected==true)
+        {
+            if (this.input.gamepad.total === 0)
+            {
+                return;
+            }
+
+            var pad = this.input.gamepad.getPad(0);
+
+            var Abutton = pad.A; 
+
+            if (Abutton)
+            {
+                space=true;
+            }
+            else{
+                space=false;
+            }
+
+            if (pad.axes.length)
+            {
+                var axisH = pad.axes[0].getValue();
+                var axisV = pad.axes[1].getValue();
+
+                if(axisH<0)
+                {
+                    left=true;
+                    right=false;
+                }
+                else if( axisH>0)
+                {
+                    left=false;
+                    right=true;
+                }
+                else
+                {
+                    right=false;
+                    left=false;
+                }
+
+                /////
+
+                if(axisV<0)
+                {
+                    up=true;
+                    down=false;
+                }
+                else if( axisV>0)
+                {
+                    up=false;
+                    down=true;
+                }
+                else
+                {
+                    down=false;
+                    up=false;
+                }
+            }
+        }
+        else{
+        left=cursors.left.isDown || xAxis > 0 ? true : false;
+        right=cursors.right.isDown || xAxis < 0 ? true : false;
+        up=cursors.up.isDown || yAxis > 0 ? true : false;
+        down=cursors.down.isDown || yAxis < 0 ? true : false;
+
+        space=cursors.space.isDown ? true : false;
+        }
+            
 
         //this.left.reset();
 
@@ -371,11 +436,12 @@ class lvl1 extends Phaser.Scene //
             player.anims.play('turn', true);
         }
 
+
+
 ///////////////////////////////////////////////////////////
 
         ////lancer armes////
-        space=cursors.space.isDown ? true : false;
-
+        
         if(space == true)
         {
             if(knifeUnlock==true)

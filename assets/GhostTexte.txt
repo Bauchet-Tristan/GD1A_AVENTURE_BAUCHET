@@ -2,8 +2,8 @@ Je t'échange 2 piece contre une clef.
 
 Tu veut bien ?
 
-Appuyer sur espace pour dire "OUI"
-
+Clavier : Appuyer sur "espace" pour dire "OUI"
+Mannette: Appuyer sur "A" pour dire "OUI"
 
 
  

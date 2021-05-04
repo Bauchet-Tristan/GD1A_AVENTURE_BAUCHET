@@ -25,6 +25,16 @@ var config = {
 
 //plateformes.setCollisionByProperty({ estSolide: true });
 
+
+
+//temporaire 
+var xAxis;
+var yAxis;
+
+var paddle;
+var paddleConnected=false;
+
+
 //var globale
 var gameOver = false;
 var tp=false;
